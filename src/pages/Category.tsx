@@ -1,13 +1,14 @@
 import useSWR from "swr";
 import axios from "axios";
 import { useCategories } from "../contexts/CategoryContext";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { ProductCard } from "../components/general/Card";
+import Button from "../components/general/Button";
 
 const BASE_URL = "https://assign-api.piton.com.tr/api/rest";
 
-interface CategoryResponse {
+interface Product {
   id: number;
   slug: string;
   name: string;
@@ -18,7 +19,11 @@ interface CategoryResponse {
   created_at: string;
 }
 
-const categoryFetcher = (url: string): Promise<CategoryResponse> =>
+interface CategoryProductsResponse {
+  product: Product[];
+}
+
+const categoryFetcher = (url: string): Promise<CategoryProductsResponse> =>
   axios({
     method: "GET",
     headers: {
@@ -29,9 +34,12 @@ const categoryFetcher = (url: string): Promise<CategoryResponse> =>
 
 function Category() {
   const { categories } = useCategories();
+  const { id } = useParams<{ id: string }>();
 
-  const { data, error, isLoading } = useSWR<CategoryResponse>(
-    `${BASE_URL}/products/${useParams().id}`,
+  const navigation = useNavigate();
+
+  const { data, error, isLoading } = useSWR<CategoryProductsResponse>(
+    `${BASE_URL}/products/${id}`,
     categoryFetcher
   );
 
@@ -43,16 +51,30 @@ function Category() {
     return (
       <p>
         We can't deliver your favorite categories right now - try again later
-        {data.data.product.map((product) => (
-          <ProductCard product={product} key={product.id} />
-        ))}
       </p>
     );
   }
 
-  console.log(categories.filter((el) => el.id === 1));
+  const products = data?.data.product || [];
+  const currCategory = categories.filter((el) => el.id === 1);
+  const currCategoryTitle = currCategory.at(0).name;
 
-  return <main className="flex flex-col gap-12 px-12 py-8">deneme</main>;
+  return (
+    <main className="flex flex-col justify-start gap-12 px-12 py-8">
+      <Button
+        className="self-start"
+        type="hyperlink-navigation"
+        onClick={() => navigation("/")}
+      >
+        {currCategoryTitle}
+      </Button>
+      <section className="grid grid-cols-3 gap-8">
+        {products.map((product) => (
+          <ProductCard product={product} key={product.id} />
+        ))}
+      </section>
+    </main>
+  );
 }
 
 export default Category;

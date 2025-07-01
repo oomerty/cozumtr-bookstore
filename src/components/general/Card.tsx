@@ -16,7 +16,7 @@ interface ProductCardProps {
 function Card({ children, onClick }: CardProps) {
   return (
     <div
-      className="bg-violet-50 rounded outline outline-1 outline-offset-[-1px] outline-slate-900/10 inline-flex flex-col justify-start items-center gap-5"
+      className={`bg-violet-50 rounded outline outline-1 outline-offset-[-1px] outline-slate-900/10 inline-flex flex-col justify-start items-center gap-5`}
       onClick={onClick}
     >
       {children}
@@ -25,13 +25,18 @@ function Card({ children, onClick }: CardProps) {
 }
 
 function ProductCard({ product }: ProductCardProps) {
+  console.log(product);
   return (
     <Card>
       <img
-        src={product.img}
-        alt={`Book cover for ${product.bookAuthor}'s ${product.bookTitle}`}
+        src={product.cover}
+        alt={`Book cover for ${product.author}'s ${product.name}`}
       />
-      <p>{product.price}</p>
+      <div>
+        <h4>{product.name}</h4>
+        <p>{product.author}</p>
+      </div>
+      <p>{product.price} $</p>
     </Card>
   );
 }
