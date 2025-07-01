@@ -1,0 +1,43 @@
+interface FieldProps {
+  label?: string;
+  placeholder: string;
+  type?: "text" | "email" | "password";
+  onClick?: () => void;
+  onChange?: () => void;
+  disabled?: boolean;
+  value: object;
+}
+
+function Field({
+  label,
+  placeholder,
+  type,
+  onClick,
+  onChange,
+  disabled,
+  value,
+}: FieldProps) {
+  return (
+    <div className="flex flex-col gap-2.5">
+      {label && (
+        <label
+          htmlFor=""
+          className="justify-start text-slate-900 text-sm font-semibold"
+        >
+          {label}
+        </label>
+      )}
+      <input
+        type={type}
+        onClick={onClick}
+        placeholder={placeholder || "Field"}
+        disabled={disabled}
+        className="p-4 bg-violet-50 rounded inline-flex justify-start items-center gap-2.5 text-slate-900/40 text-md font-normal"
+        value={value}
+        onChange={onChange}
+      />
+    </div>
+  );
+}
+
+export default Field;
