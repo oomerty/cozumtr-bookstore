@@ -6,6 +6,7 @@ import axios from "axios";
 import Button from "../components/general/Button";
 import Field from "../components/general/Field";
 import { useAuth } from "../contexts/AuthContext";
+import Checkbox from "../components/general/Checkbox";
 
 const BASE_URL = "https://assign-api.piton.com.tr/api/rest";
 
@@ -115,6 +116,7 @@ function Login() {
         onChange={(e) => setPassword(e.target.value)}
         value={password}
       />
+      <Checkbox id="loginRememberMe" label="Remember Me" />
     </Auth>
   );
 }

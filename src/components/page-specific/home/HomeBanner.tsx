@@ -33,13 +33,13 @@ function HomeBanner() {
     <div className="flex flex-col gap-8">
       {slides.map((slide, index) => (
         <div
-          className={`relative bg-gradient-to-l from-indigo-950/20 to-slate-900/70 rounded-lg border border-slate-900/20 ${
+          className={`relative bg-gradient-to-l from-indigo-950/20 to-slate-900/70 rounded-lg border border-slate-900/20 overflow-hidden ${
             currentSlide !== index && "hidden"
           }`}
           key={index}
         >
           <img src={slide.imgSrc} alt="" />
-          <p className="absolute left-8 top-1/4 w-1/3 text-white text-5xl font-semibold leading-16">
+          <p className="absolute left-4 md:left-8 top-1/4 w-full md:w-1/3 text-white text-lg md:text-5xl font-semibold leading-16">
             <span className="text-orange-300 font-extrabold">
               {slide.captionHighlight && slide.captionHighlight}
             </span>
@@ -53,10 +53,10 @@ function HomeBanner() {
             onClick={() => {
               if (index !== currentSlide) handleSlideSwitch(index);
             }}
-            className={` rounded-full transition duration-300 ${
+            className={` rounded-full transition duration-300 hover:ring-1 ${
               index === currentSlide
-                ? "size-3 bg-orange-500"
-                : "size-2.5 bg-slate-900/60"
+                ? "size-3 bg-orange-500 hover:ring-orange-500"
+                : "size-2.5 bg-slate-900/60 hover:ring-slate-900/60"
             }`}
             key={index}
           />
