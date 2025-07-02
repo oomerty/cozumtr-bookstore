@@ -4,6 +4,7 @@ import Button from "../../general/Button";
 import axios from "axios";
 import useSWR from "swr";
 import { ProductCard } from "../../general/Card";
+import Spinner from "../../general/Spinner";
 
 const BASE_URL = "https://assign-api.piton.com.tr/api/rest";
 
@@ -49,7 +50,7 @@ function Section({ category }: SectionProps) {
   );
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
 
   if (error) {
@@ -73,12 +74,13 @@ function Section({ category }: SectionProps) {
           View All
         </Button>
       </div>
-      <section className="flex flex-row col-span-2 gap-8">
+      <section className="flex flex-col md:flex-row col-span-2 gap-6 md:gap-4">
         {products.map((product: Product) => (
           <ProductCard
             type="sm"
+            categoryId={category.id}
             product={product}
-            className="w-80"
+            className="md:w-80"
             key={product.id}
           />
         ))}

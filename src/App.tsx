@@ -9,6 +9,9 @@ import Home from "./pages/Home";
 import { Login, Signup } from "./pages/Auth";
 import Nav from "./components/general/Nav";
 import Category from "./pages/Category";
+import Product from "./pages/Product";
+import Message from "./components/general/Message";
+import Button from "./components/general/Button";
 
 function App() {
   return (
@@ -29,9 +32,17 @@ function App() {
               {/* APPLICATION */}
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
-                <Route path="product/:slug" element={<Home />} />
+                <Route path="product/:slug" element={<Product />} />
                 <Route path="category/:id" element={<Category />} />
-                <Route path="*" element={<Home />} />
+                <Route
+                  path="*"
+                  element={
+                    <Message
+                      title="404"
+                      message="This page cannot be found - please try again or start discovering from our homepage"
+                    />
+                  }
+                />
               </Route>
             </Routes>
           </BrowserRouter>
@@ -45,7 +56,9 @@ function MainLayout() {
   return (
     <div className="font-manrope">
       <Nav />
-      <Outlet />
+      <main className="flex flex-col gap-8 md:gap-12 px-6 md:px-12 py-6 md:py-8 font-manrope overflow-x-hidden md:overflow-x-auto">
+        <Outlet />
+      </main>
     </div>
   );
 }

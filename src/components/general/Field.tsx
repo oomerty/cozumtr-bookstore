@@ -32,7 +32,7 @@ function Field({
         onClick={onClick}
         placeholder={placeholder || "Field"}
         disabled={disabled}
-        className="p-4 bg-violet-50 rounded inline-flex justify-start items-center gap-2.5 text-slate-900/40 text-md font-normal"
+        className="px-5 py-2.5 bg-violet-50 rounded inline-flex justify-start items-center gap-2.5 text-slate-900/40 text-md font-normal"
         value={value}
         onChange={onChange}
       />

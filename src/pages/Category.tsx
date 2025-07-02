@@ -5,6 +5,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { ProductCard } from "../components/general/Card";
 import Button from "../components/general/Button";
+import Spinner from "../components/general/Spinner";
+import Message from "../components/general/Message";
 
 const BASE_URL = "https://assign-api.piton.com.tr/api/rest";
 
@@ -44,14 +46,15 @@ function Category() {
   );
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Spinner />;
   }
 
-  if (error) {
+  if (data?.data.product.length <= 0 || error) {
     return (
-      <p>
-        We can't deliver your favorite categories right now - try again later
-      </p>
+      <Message
+        title="Nothing..."
+        message="We can't deliver your favorite categories right now - try again later"
+      />
     );
   }
 
@@ -60,20 +63,26 @@ function Category() {
   const currCategoryTitle = currCategory.at(0)?.name;
 
   return (
-    <main className="flex flex-col justify-start gap-12 px-12 py-8">
+    <>
       <Button
         className="self-start"
         type="hyperlink-navigation"
         onClick={() => navigation("/")}
       >
+        <span className="material-symbols-outlined">chevron_left</span>
         {currCategoryTitle}
       </Button>
-      <section className="grid grid-cols-3 gap-8">
+      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
         {products.map((product: Product) => (
-          <ProductCard type="lg" product={product} key={product.id} />
+          <ProductCard
+            type="lg"
+            categoryId={id}
+            product={product}
+            key={product.id}
+          />
         ))}
       </section>
-    </main>
+    </>
   );
 }
 

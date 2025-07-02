@@ -42,7 +42,7 @@ function Auth({
 
       <div className="flex flex-col w-2/3 h-full m-auto">
         <div className="header flex flex-col gap-16 py-12">
-          <Link to="/home" className="branding self-center h-16">
+          <Link to="/" className="branding self-center h-16">
             <img src="./img/logo.svg" alt="Bookstore's logo in purple color" />
           </Link>
           <div className="title flex flex-col gap-1">
@@ -55,7 +55,7 @@ function Auth({
           </div>
         </div>
 
-        <form className="w-full h-full">
+        <form className="w-full h-full flex flex-col justify-between pb-8">
           <div className="flex flex-col gap-8">{children}</div>
           <div className="flex flex-col gap-2.5">
             <Button type="primary" onClick={primaryOnClick}>
