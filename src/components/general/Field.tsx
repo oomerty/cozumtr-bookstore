@@ -3,9 +3,9 @@ interface FieldProps {
   placeholder: string;
   type?: "text" | "email" | "password";
   onClick?: () => void;
-  onChange?: () => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
-  value: object;
+  value: string | number | readonly string[];
 }
 
 function Field({

@@ -56,8 +56,8 @@ function Category() {
   }
 
   const products = data?.data.product || [];
-  const currCategory = categories.filter((el) => el.id === 1);
-  const currCategoryTitle = currCategory.at(0).name;
+  const currCategory = categories.filter((el) => el.id === Number(id));
+  const currCategoryTitle = currCategory.at(0)?.name;
 
   return (
     <main className="flex flex-col justify-start gap-12 px-12 py-8">
@@ -69,8 +69,8 @@ function Category() {
         {currCategoryTitle}
       </Button>
       <section className="grid grid-cols-3 gap-8">
-        {products.map((product) => (
-          <ProductCard product={product} key={product.id} />
+        {products.map((product: Product) => (
+          <ProductCard type="lg" product={product} key={product.id} />
         ))}
       </section>
     </main>

@@ -26,7 +26,7 @@ function AuthProvider({ children }: AuthContextProviderProps) {
     }
   }, []);
 
-  async function authenticate({ token }) {
+  async function authenticate({ token }: { token: string }) {
     setAuthToken(token);
     console.log(token);
 

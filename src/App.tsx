@@ -43,10 +43,10 @@ function App() {
 
 function MainLayout() {
   return (
-    <>
+    <div className="font-manrope">
       <Nav />
       <Outlet />
-    </>
+    </div>
   );
 }
 

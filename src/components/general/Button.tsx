@@ -1,13 +1,15 @@
 interface ButtonProps {
   children: React.ReactNode;
-  className: string | undefined;
+  className?: string;
   type?:
     | "primary"
     | "secondary"
     | "field"
     | "hyperlink"
     | "hyperlink-navigation";
-  onClick?: () => void;
+  onClick?: (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => void | Promise<void>;
   disabled?: boolean;
 }
 
@@ -33,7 +35,7 @@ function Button({ children, className, type, onClick, disabled }: ButtonProps) {
         type === "primary" && "bg-orange-500 hover:bg-orange-400 text-white"
       } ${
         type === "secondary" &&
-        "text-indigo-600 outline outline-1 outline-offset-[-1px] outline-indigo-600 hover:bg-gray-50"
+        "text-indigo-600 outline-1 outline-offset-[-1px] outline-indigo-600 hover:bg-gray-50"
       } ${className && className}`}
       onClick={onClick}
       disabled={disabled}

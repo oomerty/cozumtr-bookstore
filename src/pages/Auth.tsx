@@ -14,9 +14,13 @@ interface AuthProps {
   greetTitle: string;
   mainTitle: string;
   primaryButtonText: string;
-  primaryOnClick: () => void;
+  primaryOnClick: (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
+  ) => void | Promise<void>;
   secondaryButtonText: string;
-  secondaryOnClick: () => void;
+  secondaryOnClick: (
+    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
+  ) => void | Promise<void>;
 }
 
 function Auth({
@@ -29,7 +33,7 @@ function Auth({
   secondaryOnClick,
 }: AuthProps) {
   return (
-    <main className="h-screen grid grid-cols-1 md:grid-cols-2">
+    <main className="h-screen grid grid-cols-1 md:grid-cols-2 font-manrope">
       <img
         src="./img/login-banner.webp"
         alt="Image from a bookstore, table and a light source on the focus, table is filled with books"
@@ -71,8 +75,8 @@ function Login() {
   const navigate = useNavigate();
   const { authenticate } = useAuth();
 
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
 
   return (
     <Auth
@@ -172,7 +176,7 @@ function Signup() {
 }
 
 async function handleAuth(
-  e: React.FormEvent<HTMLFormElement>,
+  e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
   authType: "login" | "register",
   data: object,
   navigate: NavigateFunction,

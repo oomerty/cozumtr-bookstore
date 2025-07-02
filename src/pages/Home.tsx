@@ -20,9 +20,9 @@ function Home() {
 
   return (
     <>
-      <main className="flex flex-col gap-12 px-12 py-8">
+      <main className="flex flex-col gap-12 px-12 py-8 font-manrope">
         <HomeBanner />
-        {categories.map((category: Category) => (
+        {categories.map((category) => (
           <Section category={category} key={category.id} />
         ))}
       </main>
