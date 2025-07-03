@@ -1,9 +1,12 @@
+import type { UseFormRegister } from "react-hook-form";
+
 interface FieldProps {
   label?: string;
   placeholder: string;
   type?: "text" | "email" | "password";
   onClick?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  register?: UseFormRegisterReturn;
   disabled?: boolean;
   value: string | number | readonly string[];
 }
@@ -14,6 +17,7 @@ function Field({
   type,
   onClick,
   onChange,
+  register,
   disabled,
   value,
 }: FieldProps) {
@@ -35,6 +39,7 @@ function Field({
         className="px-5 py-2.5 bg-violet-50 hover:bg-violet-100 rounded inline-flex justify-start items-center gap-2.5 text-slate-900/40 active:text-slate-900 text-md font-normal"
         value={value}
         onChange={onChange}
+        {...register}
       />
     </div>
   );

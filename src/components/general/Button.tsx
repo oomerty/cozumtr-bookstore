@@ -11,9 +11,17 @@ interface ButtonProps {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void | Promise<void>;
   disabled?: boolean;
+  formSubmit?: boolean;
 }
 
-function Button({ children, className, type, onClick, disabled }: ButtonProps) {
+function Button({
+  children,
+  className,
+  type,
+  onClick,
+  disabled,
+  formSubmit,
+}: ButtonProps) {
   if (type === "hyperlink" || type === "hyperlink-navigation")
     return (
       <button
@@ -45,6 +53,7 @@ function Button({ children, className, type, onClick, disabled }: ButtonProps) {
       } ${className && className}`}
       onClick={onClick}
       disabled={disabled}
+      type={formSubmit && "submit"}
     >
       {children}
     </button>

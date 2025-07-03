@@ -57,12 +57,12 @@ function AuthProvider({ children }: AuthContextProviderProps) {
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-function useAuth(): AuthContextType {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within a AuthContextProvider");
-  }
-  return context;
-}
+// function useAuth(): AuthContextType {
+//   const context = useContext(AuthContext);
+//   if (context === undefined) {
+//     throw new Error("useAuth must be used within a AuthContextProvider");
+//   }
+//   return context;
+// }
 
-export { AuthProvider, useAuth };
+export { AuthProvider };

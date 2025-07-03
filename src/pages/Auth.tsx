@@ -1,14 +1,7 @@
 import type React from "react";
-import { useState } from "react";
-import { Link, useNavigate, type NavigateFunction } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 import Button from "../components/general/Button";
-import Field from "../components/general/Field";
-import { useAuth } from "../contexts/AuthContext";
-import Checkbox from "../components/general/Checkbox";
-
-const BASE_URL = "https://assign-api.piton.com.tr/api/rest";
 
 interface AuthProps {
   children: React.ReactNode;
@@ -22,6 +15,7 @@ interface AuthProps {
   secondaryOnClick: (
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
   ) => void | Promise<void>;
+  onSubmit: () => void;
 }
 
 function Auth({
@@ -32,7 +26,13 @@ function Auth({
   primaryOnClick,
   secondaryButtonText,
   secondaryOnClick,
+  onSubmit,
 }: AuthProps) {
+  const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+
+  if (token) navigate("/");
+
   return (
     <main className="h-screen grid grid-cols-1 md:grid-cols-2 font-manrope">
       <img
@@ -56,10 +56,13 @@ function Auth({
           </div>
         </div>
 
-        <form className="w-full h-full flex flex-col justify-between pb-8">
+        <form
+          className="w-full h-full flex flex-col justify-between pb-8"
+          onSubmit={onSubmit}
+        >
           <div className="flex flex-col gap-8">{children}</div>
           <div className="flex flex-col gap-2.5">
-            <Button type="primary" onClick={primaryOnClick}>
+            <Button type="primary" formSubmit={true}>
               {primaryButtonText}
             </Button>
             <Button type="secondary" onClick={secondaryOnClick}>
@@ -72,140 +75,4 @@ function Auth({
   );
 }
 
-function Login() {
-  const navigate = useNavigate();
-  const { authenticate } = useAuth();
-
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-
-  return (
-    <Auth
-      greetTitle="Welcome back!"
-      mainTitle="Login to your account"
-      primaryButtonText="Login"
-      primaryOnClick={(e) =>
-        handleAuth(
-          e,
-          "login",
-          {
-            email,
-            password,
-          },
-          navigate,
-          authenticate
-        )
-      }
-      secondaryButtonText="Register"
-      secondaryOnClick={(e) => {
-        e.preventDefault();
-        navigate("/signup");
-      }}
-    >
-      <Field
-        type="email"
-        label="E-mail"
-        placeholder="john@mail.com"
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
-      />
-      <Field
-        type="password"
-        label="Password"
-        placeholder="• • • • • • • •"
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-      />
-      <Checkbox id="loginRememberMe" label="Remember Me" />
-    </Auth>
-  );
-}
-
-function Signup() {
-  const navigate = useNavigate();
-  const { authenticate } = useAuth();
-
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  return (
-    <Auth
-      greetTitle="Join today!"
-      mainTitle="Create an account"
-      primaryButtonText="Register"
-      primaryOnClick={(e) =>
-        handleAuth(
-          e,
-          "register",
-          {
-            email,
-            password,
-          },
-          navigate,
-          authenticate
-        )
-      }
-      secondaryButtonText="Login"
-      secondaryOnClick={(e) => {
-        e.preventDefault();
-        navigate("/login");
-      }}
-    >
-      <Field
-        type="text"
-        label="Name"
-        placeholder="John Doe"
-        onChange={(e) => setName(e.target.value)}
-        value={name}
-      />
-      <Field
-        type="email"
-        label="E-mail"
-        placeholder="john@mail.com"
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
-      />
-      <Field
-        type="password"
-        label="Password"
-        placeholder="• • • • • • • •"
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-      />
-    </Auth>
-  );
-}
-
-async function handleAuth(
-  e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>,
-  authType: "login" | "register",
-  data: object,
-  navigate: NavigateFunction,
-  authenticate: (credentials: { token: string; userId: string }) => void
-) {
-  e.preventDefault();
-
-  // if (!email && !password) {
-  //   throw new Error("Please fill the login fields!");
-  // }
-
-  try {
-    const res = await axios({
-      method: "POST",
-      url: `${BASE_URL}/${authType}`,
-      data,
-    });
-
-    authenticate(
-      authType === "login"
-        ? res.data.action_login.token
-        : res.data.action_register.token
-    );
-    navigate("/");
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-export { Login, Signup };
+export { Auth };

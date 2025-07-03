@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "../../general/Button";
 import axios from "axios";
 import useSWR from "swr";
-import { ProductCard } from "../../general/Card";
+import ProductCard from "../product-detail/ProductCard";
 import Spinner from "../../general/Spinner";
 
 const BASE_URL = "https://assign-api.piton.com.tr/api/rest";

@@ -1,24 +1,13 @@
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useSearchParams,
-} from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../components/general/Button";
-import { Card } from "../components/general/Card";
-import { useCategories } from "../contexts/CategoryContext";
+import Card from "../components/general/Card";
 import Message from "../components/general/Message";
 
 function Product() {
   const location = useLocation();
   const navigation = useNavigate();
 
-  const { slug } = useParams();
-  const [searchParams] = useSearchParams();
-  const categoryId = searchParams.get("category");
-
   const product = location.state?.product;
-  console.log(categoryId);
 
   if (!product) {
     return (

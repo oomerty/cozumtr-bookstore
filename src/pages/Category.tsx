@@ -3,12 +3,10 @@ import axios from "axios";
 import { useCategories } from "../contexts/CategoryContext";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { ProductCard } from "../components/general/Card";
+import ProductCard from "../components/page-specific/product-detail/ProductCard";
 import Button from "../components/general/Button";
 import Spinner from "../components/general/Spinner";
 import Message from "../components/general/Message";
-
-const BASE_URL = "https://assign-api.piton.com.tr/api/rest";
 
 interface Product {
   id: number;
@@ -41,7 +39,7 @@ function Category() {
   const navigation = useNavigate();
 
   const { data, error, isLoading } = useSWR<CategoryProductsResponse>(
-    `${BASE_URL}/products/${id}`,
+    `${import.meta.env.VITE_API_BASE_URL}/products/${id}`,
     categoryFetcher
   );
 
