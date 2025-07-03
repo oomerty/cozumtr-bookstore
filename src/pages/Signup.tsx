@@ -1,5 +1,6 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
 
 import { useAuth } from "../hooks/useAuth";
 
@@ -8,13 +9,37 @@ import Field from "../components/general/Field";
 import Spinner from "../components/general/Spinner";
 import Alert from "../components/general/Alert";
 
+interface SignupFormInput {
+  name: string;
+  email: string;
+  password: string;
+}
+
 function Signup() {
   const navigate = useNavigate();
-  const { register, loading, error, success } = useAuth();
+  const { register: signup, loading, error, success } = useAuth();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {
+    register,
+    handleSubmit,
+    setError,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+  } = useForm<SignupFormInput>();
+  const onSubmit: SubmitHandler<SignupFormInput> = async (data) => {
+    try {
+      await signup(data);
+      throw new Error();
+    } catch (err) {
+      setError("root", {
+        message:
+          "There might already be an account with this email - please try to login first or try again later",
+      });
+    } finally {
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+    }
+  };
 
   if (loading) return <Spinner />;
 
@@ -22,42 +47,56 @@ function Signup() {
     <Auth
       greetTitle="Join today!"
       mainTitle="Create an account"
-      primaryButtonText="Register"
-      primaryOnClick={(e) =>
-        register(e, {
-          email,
-          password,
-        })
-      }
+      primaryButtonText={isSubmitting ? "Loading..." : "Register"}
       secondaryButtonText="Login"
       secondaryOnClick={(e) => {
         e.preventDefault();
         navigate("/login");
       }}
+      onSubmit={handleSubmit(onSubmit)}
     >
       <Field
         type="text"
         label="Name"
         placeholder="John Doe"
-        onChange={(e) => setName(e.target.value)}
-        value={name}
+        register={register("name", {
+          required: "Name is required",
+        })}
       />
       <Field
         type="email"
         label="E-mail"
         placeholder="john@mail.com"
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
+        register={register("email", {
+          required: "E-mail is required",
+          validate: (value) => {
+            if (!value.includes("@")) {
+              return "E-mail must include @";
+            }
+            return true;
+          },
+        })}
       />
       <Field
         type="password"
         label="Password"
         placeholder="• • • • • • • •"
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
+        register={register("password", {
+          required: "Password is required",
+          minLength: {
+            value: 8,
+            message: "Password must have at least 8 characters",
+          },
+        })}
       />
-      {error && <p className="text-red-500 font-semibold">{error}</p>}
-      {success && <Alert title="Success" text={success} />}
+
+      {errors.root && <Alert title="Error" text={errors.root.message} />}
+      {errors.email && <Alert title="Error" text={errors.email.message} />}
+      {errors.password && (
+        <Alert title="Error" text={errors.password.message} />
+      )}
+
+      {isSubmitSuccessful && <Alert title="Success" text={success} />}
     </Auth>
   );
 }

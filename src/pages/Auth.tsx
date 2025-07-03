@@ -29,9 +29,9 @@ function Auth({
   onSubmit,
 }: AuthProps) {
   const token = localStorage.getItem("token");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  if (token) navigate("/");
+  // if (token) navigate("/");
 
   return (
     <main className="h-screen grid grid-cols-1 md:grid-cols-2 font-manrope">

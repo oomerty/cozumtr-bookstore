@@ -10,24 +10,12 @@ interface AuthHookReturn {
   ) => Promise<void>;
   logout: () => void;
   token: string;
-  loading: boolean;
-  error: string | null;
-  success: string | null;
-  clearMessages: () => void;
 }
 
 export function useAuth(): AuthHookReturn {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
   const [authToken, setAuthToken] = useState("");
 
   const navigate = useNavigate();
-
-  const clearMessages = () => {
-    setError(null);
-    setSuccess(null);
-  };
 
   const authenticate = async ({ token }: { token: string }) => {
     setAuthToken(token);
@@ -39,18 +27,7 @@ export function useAuth(): AuthHookReturn {
     }
   };
 
-  const handleAuth = async (
-    e: React.FormEvent<HTMLFormElement>,
-    authType: "login" | "register",
-    data: object
-  ) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
-
-    // API'da boş email ve pass gönderilse bile başarıyla giriş yapılabiliyor?
-
+  const handleAuth = async (authType: "login" | "register", data: object) => {
     try {
       const res = await axios({
         method: "POST",
@@ -64,24 +41,8 @@ export function useAuth(): AuthHookReturn {
       authenticate({
         token: responseData.token,
       });
-
-      setSuccess(
-        authType === "login"
-          ? "Login successful! Redirecting..."
-          : "Registration successful! Please login."
-      );
-
-      setTimeout(() => {
-        if (authType === "login") {
-          navigate("/");
-        } else {
-          navigate("/login");
-        }
-      }, 1500);
     } catch (err: any) {
-      setError(err?.response?.data?.message || "An error occurred");
-    } finally {
-      setLoading(false);
+      throw new Error(err?.response?.data?.message || "An error occurred");
     }
   };
 
@@ -96,13 +57,9 @@ export function useAuth(): AuthHookReturn {
   };
 
   return {
-    login: (e, data) => handleAuth(e, "login", data),
-    register: (e, data) => handleAuth(e, "register", data),
+    login: (data) => handleAuth("login", data),
+    register: (data) => handleAuth("register", data),
     logout: () => handleLogout(),
     token: authToken,
-    loading,
-    error,
-    success,
-    clearMessages,
   };
 }

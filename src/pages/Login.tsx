@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
@@ -8,7 +7,6 @@ import { useAuth } from "../hooks/useAuth";
 import { Auth } from "./Auth";
 import Field from "../components/general/Field";
 import Checkbox from "../components/general/Checkbox";
-import Spinner from "../components/general/Spinner";
 import Alert from "../components/general/Alert";
 
 interface LoginFormInput {
@@ -18,30 +16,34 @@ interface LoginFormInput {
 
 function Login() {
   const navigate = useNavigate();
-  const { login, loading, error, success } = useAuth();
+  const { login, success } = useAuth();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    setError,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm<LoginFormInput>();
-  const onSubmit: SubmitHandler<LoginFormInput> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
+    try {
+      await login(data);
+      throw new Error();
+    } catch (err) {
+      setError("root", {
+        message: "Cannot find user with this e-mail or password",
+      });
+    } finally {
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
+    }
   };
-
-  if (loading) return <Spinner />;
 
   return (
     <Auth
       greetTitle="Welcome back!"
       mainTitle="Login to your account"
-      primaryButtonText="Login"
-      // primaryOnClick={(e) =>
-      //   login(e, {
-      //     email,
-      //     password,
-      //   })
-      // }
+      primaryButtonText={isSubmitting ? "Loading..." : "Login"}
       secondaryButtonText="Register"
       secondaryOnClick={(e) => {
         e.preventDefault();
@@ -78,13 +80,13 @@ function Login() {
 
       <Checkbox id="loginRememberMe" label="Remember Me" />
 
+      {errors.root && <Alert title="Error" text={errors.root.message} />}
       {errors.email && <Alert title="Error" text={errors.email.message} />}
       {errors.password && (
         <Alert title="Error" text={errors.password.message} />
       )}
 
-      {error && <p className="text-red-500 font-semibold">{error}</p>}
-      {success && <Alert title="Success" text={success} />}
+      {isSubmitSuccessful && <Alert title="Success" text={success} />}
     </Auth>
   );
 }

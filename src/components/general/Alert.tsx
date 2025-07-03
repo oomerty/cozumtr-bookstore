@@ -16,7 +16,7 @@ function Alert({ title, text }: AlertProps) {
   return (
     <Card
       onClick={() => handleClose()}
-      className={`items-start absolute left-3 bottom-3 px-4 py-2 !gap-1 min-w-fit md:min-w-1/3 starting:left-0 ${
+      className={`items-start absolute left-3 bottom-3 px-4 py-2 !gap-1 min-w-full md:max-w-1/2 md:min-w-1/3 starting:left-0 ${
         !show && "hidden"
       }`}
     >
