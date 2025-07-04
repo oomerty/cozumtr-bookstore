@@ -43,7 +43,11 @@ function Cart() {
             onClick={() => navigation(-1)}
           >
             <span className="material-symbols-outlined">chevron_left</span>
-            Cart
+            Cart{" "}
+            {productsOnCart.length > 0 &&
+              `(${productsOnCart.length} item${
+                productsOnCart.length > 1 ? "s" : ""
+              })`}
           </Button>
           {productsOnCart.length !== 0 && (
             <Button type="hyperlink" onClick={() => handleClearCart()}>
