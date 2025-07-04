@@ -70,7 +70,7 @@ function Category() {
         <span className="material-symbols-outlined">chevron_left</span>
         {currCategoryTitle}
       </Button>
-      <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      <section className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
         {products.map((product: Product) => (
           <ProductCard
             type="lg"

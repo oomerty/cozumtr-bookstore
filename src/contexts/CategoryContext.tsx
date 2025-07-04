@@ -4,8 +4,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import useSWR from "swr";
 import axios from "axios";
 
-const BASE_URL = "https://assign-api.piton.com.tr/api/rest";
-
 interface Category {
   id: number;
   name: string;
@@ -37,7 +35,7 @@ function CategoryProvider({ children }: CategoryContextProviderProps) {
   const [categoryData, setCategoryData] = useState<Category[]>([]);
 
   const { data, error, isLoading } = useSWR<CategoriesResponse>(
-    `${BASE_URL}/categories`,
+    `${import.meta.env.VITE_API_BASE_URL}/categories`,
     categoriesFetcher
   );
 

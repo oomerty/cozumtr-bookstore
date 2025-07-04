@@ -7,6 +7,7 @@ interface ButtonProps {
     | "field"
     | "hyperlink"
     | "hyperlink-navigation";
+  ref?: React.RefObject;
   onClick?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => void | Promise<void>;
@@ -18,6 +19,7 @@ function Button({
   children,
   className,
   type,
+  ref,
   onClick,
   disabled,
   formSubmit,
@@ -32,6 +34,7 @@ function Button({
           type === "hyperlink-navigation" &&
           "text-slate-900 hover:text-slate-700 active:text-slate-950 text-2xl font-bold"
         } ${className && className}`}
+        ref={ref}
         onClick={onClick}
         disabled={disabled}
       >
@@ -50,7 +53,8 @@ function Button({
       } ${
         type === "field" &&
         "text-slate-900 bg-violet-50 hover:bg-violet-100 active:bg-violet-200"
-      } ${className && className}`}
+      } ${className && className} ${disabled && "disabled:bg-orange-300"}`}
+      ref={ref}
       onClick={onClick}
       disabled={disabled}
       type={formSubmit && "submit"}

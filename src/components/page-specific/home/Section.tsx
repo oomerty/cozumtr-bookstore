@@ -14,6 +14,7 @@ interface Category {
 }
 
 interface SectionProps {
+  className?: string;
   category: Category;
 }
 
@@ -41,7 +42,7 @@ const categoryFetcher = (url: string): Promise<CategoryProductsResponse> =>
     url,
   });
 
-function Section({ category }: SectionProps) {
+function Section({ className, category }: SectionProps) {
   const navigate = useNavigate();
 
   const { data, error, isLoading } = useSWR<CategoryProductsResponse>(
@@ -64,7 +65,11 @@ function Section({ category }: SectionProps) {
   const products = data?.data.product || [];
 
   return (
-    <section className="grid grid-cols-2 gap-4 items-center">
+    <section
+      className={`grid grid-cols-2 gap-4 items-center ${
+        className && className
+      }`}
+    >
       <h3 className="text-slate-900 text-2xl font-bold">{category.name}</h3>
       <div className="flex justify-self-end">
         <Button
@@ -74,7 +79,7 @@ function Section({ category }: SectionProps) {
           View All
         </Button>
       </div>
-      <section className="flex flex-col md:flex-row col-span-2 gap-6 md:gap-4">
+      <section className="flex flex-col md:flex-row col-span-2 gap-6 md:gap-4 overflow-x-scroll overflow-y-hidden">
         {products.map((product: Product) => (
           <ProductCard
             type="sm"

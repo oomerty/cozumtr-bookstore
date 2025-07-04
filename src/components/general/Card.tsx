@@ -7,7 +7,9 @@ interface CardProps {
 function Card({ children, className, onClick }: CardProps) {
   return (
     <div
-      className={`bg-violet-50 hover:bg-violet-100 rounded outline-1 outline-offset-[-1px] outline-slate-900/10 flex flex-col justify-start items-center gap-5 transition duration-150 ${className}`}
+      className={`bg-violet-50 hover:bg-violet-100 rounded outline-1 outline-offset-[-1px] outline-slate-900/10 flex flex-col justify-start items-center gap-5 transition duration-150 ${
+        className && className
+      }`}
       onClick={onClick}
     >
       {children}

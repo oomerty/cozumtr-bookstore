@@ -1,13 +1,33 @@
 import { useLocation, useNavigate } from "react-router-dom";
+
+import { useLike } from "../contexts/LikeContext";
+
 import Button from "../components/general/Button";
 import Card from "../components/general/Card";
 import Message from "../components/general/Message";
+import Spinner from "../components/general/Spinner";
+import Alert from "../components/general/Alert";
+import { useCart } from "../contexts/CartContext";
 
 function Product() {
+  const { likeProduct, isLoading, error } = useLike();
+  const {
+    addProductToCart,
+    isLoading: isLoadingCart,
+    error: errorCart,
+  } = useCart();
   const location = useLocation();
   const navigation = useNavigate();
 
   const product = location.state?.product;
+
+  function handleLikeProduct(product: object) {
+    likeProduct(product);
+  }
+
+  function handleAddToCart(product: object) {
+    addProductToCart(product);
+  }
 
   if (!product) {
     return (
@@ -48,10 +68,15 @@ function Product() {
             <Button
               type="field"
               className="absolute right-8 !p-3 bg-violet-50 rounded-full shadow-[0px_4px_8px_0px_rgba(98,81,221,0.20)]"
+              onClick={() => handleLikeProduct({ ...product, categoryId: 1 })}
             >
-              <span className="material-symbols-outlined text-indigo-600">
-                favorite
-              </span>
+              {isLoading || isLoadingCart ? (
+                <Spinner />
+              ) : (
+                <span className="material-symbols-outlined text-indigo-600">
+                  favorite
+                </span>
+              )}
             </Button>
           </span>
 
@@ -62,12 +87,19 @@ function Product() {
             </p>
           </span>
 
-          <Button type="primary" className="w-full md:w-max self-end gap-40">
+          <Button
+            type="primary"
+            className="w-full md:w-max self-end gap-40"
+            onClick={() => handleAddToCart(product)}
+          >
             <span className="text-bold">{product.price} $</span>
             <span>Buy Now</span>
           </Button>
         </div>
       </section>
+
+      {error && <Alert title="Error" text={error} />}
+      {errorCart && <Alert title="Error" text={errorCart} />}
     </div>
   );
 }
