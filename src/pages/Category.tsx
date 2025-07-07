@@ -20,7 +20,9 @@ interface Product {
 }
 
 interface CategoryProductsResponse {
-  product: Product[];
+  data: {
+    product: Product[];
+  };
 }
 
 const categoryFetcher = (url: string): Promise<CategoryProductsResponse> =>
@@ -47,7 +49,7 @@ function Category() {
     return <Spinner />;
   }
 
-  if (data?.data.product.length <= 0 || error) {
+  if (data?.data.product?.length === 0 || error) {
     return (
       <Message
         title="Nothing..."
@@ -64,7 +66,7 @@ function Category() {
     <>
       <Button
         className="self-start"
-        type="hyperlink-navigation"
+        btnType="hyperlink-navigation"
         onClick={() => navigation("/")}
       >
         <span className="material-symbols-outlined">chevron_left</span>

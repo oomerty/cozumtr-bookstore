@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useCart } from "../contexts/CartContext";
+import type ProductType from "../../../types/ProductType";
 
 import Button from "../components/general/Button";
 import Spinner from "../components/general/Spinner";
@@ -10,7 +11,7 @@ import Card from "../components/general/Card";
 import ProductCard from "../components/page-specific/product-detail/ProductCard";
 
 function Cart() {
-  const { getProductsOnCart, clearCart, isLoading, error } = useCart();
+  const { getProductsOnCart, clearCart, isLoading } = useCart();
   const [productsOnCart, setProductsOnCart] = useState([]);
   const navigation = useNavigate();
 
@@ -20,7 +21,7 @@ function Cart() {
     const fetchedProductsOnCart = getProductsOnCart();
     if (fetchedProductsOnCart.length !== 0) {
       const newTotalPrice = fetchedProductsOnCart.reduce(
-        (sum, item) => sum + item.price,
+        (sum, item) => sum + item?.price,
         0
       );
       setTotalPrice(newTotalPrice);
@@ -39,7 +40,7 @@ function Cart() {
         <span className="flex flex-row justify-between">
           <Button
             className="self-start"
-            type="hyperlink-navigation"
+            btnType="hyperlink-navigation"
             onClick={() => navigation(-1)}
           >
             <span className="material-symbols-outlined">chevron_left</span>
@@ -50,7 +51,7 @@ function Cart() {
               })`}
           </Button>
           {productsOnCart.length !== 0 && (
-            <Button type="hyperlink" onClick={() => handleClearCart()}>
+            <Button btnType="hyperlink" onClick={() => handleClearCart()}>
               Clear Cart
             </Button>
           )}
@@ -63,10 +64,10 @@ function Cart() {
           />
         )}
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-          {productsOnCart.map((product: object) => (
+          {productsOnCart.map((product: ProductType) => (
             <ProductCard
               type="sm"
-              categoryId={null}
+              categoryId={undefined}
               product={product}
               key={product.id}
             />
@@ -107,7 +108,7 @@ function Cart() {
           <span className="flex flex-col gap-2">
             <Button
               className="w-full"
-              type="primary"
+              btnType="primary"
               disabled={totalPrice === 0}
               onClick={() =>
                 navigation(
@@ -120,7 +121,7 @@ function Cart() {
 
             <Button
               className="w-full"
-              type="secondary"
+              btnType="secondary"
               onClick={() => navigation("/")}
             >
               Continue shopping

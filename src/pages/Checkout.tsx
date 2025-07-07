@@ -2,19 +2,20 @@ import { useEffect, useId, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { useCart } from "../contexts/CartContext";
+import type ProductType from "../../../types/ProductType";
 
 import Button from "../components/general/Button";
 import Spinner from "../components/general/Spinner";
 import Card from "../components/general/Card";
 import ProductCard from "../components/page-specific/product-detail/ProductCard";
+import Message from "../components/general/Message";
 
 function Checkout() {
   const { getProductsOnCart, isLoading, error } = useCart();
   const [productsOnCart, setProductsOnCart] = useState([]);
   const navigation = useNavigate();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const items_number = searchParams.get("items_number");
+  const [searchParams] = useSearchParams();
   const price = searchParams.get("price");
   const totalPrice = Number(price);
 
@@ -35,7 +36,7 @@ function Checkout() {
       <span className="flex flex-row justify-between">
         <Button
           className="self-start"
-          type="hyperlink-navigation"
+          btnType="hyperlink-navigation"
           onClick={() => navigation(-1)}
         >
           <span className="material-symbols-outlined">chevron_left</span>
@@ -90,7 +91,7 @@ function Checkout() {
           <span className="flex flex-col lg:flex-row-reverse gap-2">
             <Button
               className="w-full"
-              type="primary"
+              btnType="primary"
               disabled={totalPrice === 0}
               onClick={() =>
                 navigation(
@@ -106,7 +107,7 @@ function Checkout() {
 
             <Button
               className="w-full"
-              type="secondary"
+              btnType="secondary"
               onClick={() => navigation("/cart")}
             >
               Go back to cart
@@ -116,13 +117,19 @@ function Checkout() {
       </section>
 
       {isLoading && <Spinner />}
+      {error && (
+        <Message
+          title="Cannot Checkout Right Now..."
+          message="An error occured while checking out - please try again later"
+        />
+      )}
       <span className="flex flex-col gap-2">
         <h2 className="font-semibold uppercase text-slate-900">Items</h2>
         <section className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
-          {productsOnCart.map((product: object) => (
+          {productsOnCart.map((product: ProductType) => (
             <ProductCard
               type="sm"
-              categoryId={null}
+              categoryId={undefined}
               product={product}
               key={product.id}
             />

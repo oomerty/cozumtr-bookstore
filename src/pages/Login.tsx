@@ -16,7 +16,7 @@ interface LoginFormInput {
 
 function Login() {
   const navigate = useNavigate();
-  const { login, success } = useAuth();
+  const { login } = useAuth();
 
   const {
     register,
@@ -28,14 +28,16 @@ function Login() {
     try {
       await login(data);
       throw new Error();
-    } catch (err) {
+    } catch {
       setError("root", {
         message: "Cannot find user with this e-mail or password",
       });
     } finally {
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
+      if (!errors) {
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      }
     }
   };
 
@@ -86,7 +88,7 @@ function Login() {
         <Alert title="Error" text={errors.password.message} />
       )}
 
-      {isSubmitSuccessful && <Alert title="Success" text={success} />}
+      {isSubmitSuccessful && <Alert title="Success" text="Login successful" />}
     </Auth>
   );
 }

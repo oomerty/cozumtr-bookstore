@@ -1,22 +1,17 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
-import Card from "../../general/Card";
 import axios from "axios";
 import useSWR from "swr";
-import { memo } from "react";
+
+import type ProductType from "../../../types/ProductType";
+
+import Card from "../../general/Card";
 
 interface ProductCardProps {
   type: "sm" | "lg";
   className?: string;
   categoryId: number | string | undefined;
-  product: Product;
-}
-
-interface Product {
-  slug: string;
-  cover: string;
-  author: string;
-  name: string;
-  price: number;
+  product: ProductType;
 }
 
 interface ProductCoverResponse {
@@ -44,7 +39,7 @@ const ProductCard = memo(function ProductCard({
   className,
   type,
 }: ProductCardProps) {
-  const { data, error, isLoading } = useSWR<ProductCoverResponse>(
+  const { data, isLoading } = useSWR<ProductCoverResponse>(
     [`${import.meta.env.VITE_API_BASE_URL}/cover_image`, product.cover],
     ([url, fileName]) => productCoverFetcher(url, fileName)
   );

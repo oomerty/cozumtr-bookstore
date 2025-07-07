@@ -1,4 +1,4 @@
-import type { UseFormRegister } from "react-hook-form";
+import type { UseFormRegister, FieldValues } from "react-hook-form";
 
 interface FieldProps {
   label?: string;
@@ -6,9 +6,9 @@ interface FieldProps {
   type?: "text" | "email" | "password";
   onClick?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  register?: UseFormRegisterReturn;
+  register?: UseFormRegister<FieldValues>;
   disabled?: boolean;
-  value: string | number | readonly string[];
+  value?: string | number | readonly string[];
 }
 
 function Field({

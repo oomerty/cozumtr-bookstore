@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useLike } from "../contexts/LikeContext";
+import type ProductType from "../types/ProductType";
 
 import ProductCard from "../components/page-specific/product-detail/ProductCard";
 import Button from "../components/general/Button";
@@ -14,7 +15,7 @@ function Liked() {
   const navigation = useNavigate();
 
   useEffect(() => {
-    const fetchedLikedProducts = getLikedProducts();
+    const fetchedLikedProducts: Array<object | null> = getLikedProducts();
     setLikedProducts(fetchedLikedProducts);
   }, [getLikedProducts]);
 
@@ -35,7 +36,7 @@ function Liked() {
     <>
       <Button
         className="self-start"
-        type="hyperlink-navigation"
+        btnType="hyperlink-navigation"
         onClick={() => navigation(-1)}
       >
         <span className="material-symbols-outlined">chevron_left</span>
@@ -48,10 +49,10 @@ function Liked() {
         />
       )}
       <section className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
-        {likedProducts.map((product: object) => (
+        {likedProducts.map((product: ProductType) => (
           <ProductCard
             type="lg"
-            categoryId={null}
+            categoryId={undefined}
             product={product}
             key={product.id}
           />

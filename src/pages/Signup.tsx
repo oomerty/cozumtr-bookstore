@@ -6,7 +6,6 @@ import { useAuth } from "../hooks/useAuth";
 
 import { Auth } from "./Auth";
 import Field from "../components/general/Field";
-import Spinner from "../components/general/Spinner";
 import Alert from "../components/general/Alert";
 
 interface SignupFormInput {
@@ -17,7 +16,7 @@ interface SignupFormInput {
 
 function Signup() {
   const navigate = useNavigate();
-  const { register: signup, loading, error, success } = useAuth();
+  const { register: signup } = useAuth();
 
   const {
     register,
@@ -28,20 +27,20 @@ function Signup() {
   const onSubmit: SubmitHandler<SignupFormInput> = async (data) => {
     try {
       await signup(data);
-      throw new Error();
-    } catch (err) {
+    } catch {
       setError("root", {
         message:
           "There might already be an account with this email - please try to login first or try again later",
       });
+      return;
     } finally {
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
+      if (!errors) {
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      }
     }
   };
-
-  if (loading) return <Spinner />;
 
   return (
     <Auth
@@ -96,7 +95,9 @@ function Signup() {
         <Alert title="Error" text={errors.password.message} />
       )}
 
-      {isSubmitSuccessful && <Alert title="Success" text={success} />}
+      {isSubmitSuccessful && (
+        <Alert title="Success" text="Account successfully created" />
+      )}
     </Auth>
   );
 }

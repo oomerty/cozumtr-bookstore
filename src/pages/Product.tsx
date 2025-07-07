@@ -42,7 +42,7 @@ function Product() {
     <div className="flex flex-col gap-8">
       <Button
         className="self-start"
-        type="hyperlink-navigation"
+        btnType="hyperlink-navigation"
         onClick={() => navigation(-1)}
       >
         <span className="material-symbols-outlined">chevron_left</span>
@@ -66,7 +66,7 @@ function Product() {
             </h2>
 
             <Button
-              type="field"
+              btnType="field"
               className="absolute right-8 !p-3 bg-violet-50 rounded-full shadow-[0px_4px_8px_0px_rgba(98,81,221,0.20)]"
               onClick={() => handleLikeProduct({ ...product, categoryId: 1 })}
             >
@@ -88,7 +88,7 @@ function Product() {
           </span>
 
           <Button
-            type="primary"
+            btnType="primary"
             className="w-full md:w-max self-end gap-40"
             onClick={() => handleAddToCart(product)}
           >

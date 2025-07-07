@@ -3,7 +3,7 @@ import Card from "./Card";
 
 interface AlertProps {
   title: string;
-  text: string;
+  text?: string;
 }
 
 function Alert({ title, text }: AlertProps) {

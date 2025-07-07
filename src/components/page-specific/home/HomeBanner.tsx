@@ -1,29 +1,35 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 function HomeBanner() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  const slides = [
-    {
-      imgSrc: "./img/home-campaign-banner-58asd5pd6drt.webp",
-      captionHighlight: "25% discount ",
-      caption: "all Paulo Coelho books!",
-    },
-    {
-      imgSrc: "./img/home-campaign-banner-58asd5pd6drt.webp",
-      caption: "Summer Deals On Childrens Category",
-    },
-    {
-      imgSrc: "./img/home-campaign-banner-58asd5pd6drt.webp",
-      caption: "Recent Title",
-    },
-  ];
+  const slides = useMemo(
+    () => [
+      {
+        imgSrc: "./img/home-campaign-banner-58asd5pd6drt.webp",
+        captionHighlight: "25% discount ",
+        caption: "all Paulo Coelho books!",
+      },
+      {
+        imgSrc: "./img/home-campaign-banner-58asd5pd6drt.webp",
+        caption: "Summer Deals On Childrens Category",
+      },
+      {
+        imgSrc: "./img/home-campaign-banner-58asd5pd6drt.webp",
+        caption: "Recent Title",
+      },
+    ],
+    []
+  );
 
-  useEffect(function () {
-    if (slides?.length > 0) {
-      setCurrentSlide(0);
-    }
-  }, []);
+  useEffect(
+    function () {
+      if (slides?.length > 0) {
+        setCurrentSlide(0);
+      }
+    },
+    [slides]
+  );
 
   function handleSlideSwitch(index: number) {
     setCurrentSlide(index);

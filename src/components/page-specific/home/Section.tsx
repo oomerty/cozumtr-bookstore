@@ -1,12 +1,13 @@
 import { useNavigate } from "react-router-dom";
 
+import type ProductType from "../../../types/ProductType";
+
 import Button from "../../general/Button";
 import axios from "axios";
 import useSWR from "swr";
 import ProductCard from "../product-detail/ProductCard";
 import Spinner from "../../general/Spinner";
-
-const BASE_URL = "https://assign-api.piton.com.tr/api/rest";
+import Message from "../../general/Message";
 
 interface Category {
   id: number;
@@ -18,19 +19,10 @@ interface SectionProps {
   category: Category;
 }
 
-interface Product {
-  id: number;
-  slug: string;
-  name: string;
-  author: string;
-  description: string;
-  cover: string;
-  price: number;
-  created_at: string;
-}
-
 interface CategoryProductsResponse {
-  product: Product[];
+  data: {
+    product: ProductType[];
+  };
 }
 
 const categoryFetcher = (url: string): Promise<CategoryProductsResponse> =>
@@ -46,7 +38,7 @@ function Section({ className, category }: SectionProps) {
   const navigate = useNavigate();
 
   const { data, error, isLoading } = useSWR<CategoryProductsResponse>(
-    `${BASE_URL}/products/${category.id}`,
+    `${import.meta.env.VITE_API_BASE_URL}/products/${category.id}`,
     categoryFetcher
   );
 
@@ -56,13 +48,14 @@ function Section({ className, category }: SectionProps) {
 
   if (error) {
     return (
-      <p>
-        We can't deliver your favorite categories right now - try again later
-      </p>
+      <Message
+        title="404"
+        message="We can't deliver your favorite categories right now - try again later"
+      />
     );
   }
 
-  const products = data?.data.product || [];
+  const products = data?.data?.product || [];
 
   return (
     <section
@@ -73,14 +66,14 @@ function Section({ className, category }: SectionProps) {
       <h3 className="text-slate-900 text-2xl font-bold">{category.name}</h3>
       <div className="flex justify-self-end">
         <Button
-          type="hyperlink"
+          btnType="hyperlink"
           onClick={() => navigate(`/category/${category.id}`)}
         >
           View All
         </Button>
       </div>
       <section className="flex flex-col md:flex-row col-span-2 gap-6 md:gap-4 overflow-x-scroll overflow-y-hidden">
-        {products.map((product: Product) => (
+        {products.map((product: ProductType) => (
           <ProductCard
             type="sm"
             categoryId={category.id}

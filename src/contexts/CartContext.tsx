@@ -1,8 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from "react";
 
+import type ProductType from "../types/ProductType";
+
 interface CartContextType {
-  addProductToCart: (product: object) => void;
+  addProductToCart: (product: ProductType) => void;
   getProductsOnCart: () => Array<object | null>;
   clearCart: () => void;
   isLoading: boolean;
@@ -16,11 +18,11 @@ interface CartContextProviderProps {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 function CartProvider({ children }: CartContextProviderProps) {
-  const [productsOnCart, setProductsOnCart] = useState<object[]>([]);
+  const [productsOnCart, setProductsOnCart] = useState<ProductType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  function addProductToCart(product: object) {
+  function addProductToCart(product: ProductType) {
     try {
       setIsLoading(true);
 
@@ -29,11 +31,7 @@ function CartProvider({ children }: CartContextProviderProps) {
       );
 
       if (alreadyAddedToCart) {
-        setProductsOnCart((arr) =>
-          arr.filter((val) => {
-            val.id !== product.id;
-          })
-        );
+        setProductsOnCart((arr) => arr.filter((val) => val.id !== product.id));
         return;
       }
 

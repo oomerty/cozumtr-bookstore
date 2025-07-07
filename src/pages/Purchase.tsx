@@ -2,6 +2,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import dateFormat from "../utils/DateFormat";
 import { useCart } from "../contexts/CartContext";
+import type ProductType from "../types/ProductType";
 
 import Button from "../components/general/Button";
 import ProductCard from "../components/page-specific/product-detail/ProductCard";
@@ -14,7 +15,7 @@ function Purchase() {
   const location = useLocation();
   const purchasedItems = location.state?.productsOnCart;
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const purchase_id = searchParams.get("purchase_id");
   const price = Number(searchParams.get("price"));
 
@@ -27,7 +28,7 @@ function Purchase() {
     }
 
     clearCart();
-  }, []);
+  }, [location.state?.productsOnCart, clearCart, navigation]);
 
   return (
     <>
@@ -77,7 +78,7 @@ function Purchase() {
 
           <Button
             className="w-full"
-            type="secondary"
+            btnType="secondary"
             onClick={() => navigation("/")}
           >
             Go back to home
@@ -86,10 +87,10 @@ function Purchase() {
       </section>
 
       <section className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
-        {purchasedItems?.map((product: object) => (
+        {purchasedItems?.map((product: ProductType) => (
           <ProductCard
             type="sm"
-            categoryId={null}
+            categoryId={undefined}
             product={product}
             key={product.id}
           />

@@ -1,5 +1,5 @@
 import type React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Button from "../components/general/Button";
 
@@ -8,9 +8,6 @@ interface AuthProps {
   greetTitle: string;
   mainTitle: string;
   primaryButtonText: string;
-  primaryOnClick: (
-    e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
-  ) => void | Promise<void>;
   secondaryButtonText: string;
   secondaryOnClick: (
     e: React.FormEvent<HTMLFormElement> | React.MouseEvent<HTMLButtonElement>
@@ -23,16 +20,10 @@ function Auth({
   greetTitle,
   mainTitle,
   primaryButtonText,
-  primaryOnClick,
   secondaryButtonText,
   secondaryOnClick,
   onSubmit,
 }: AuthProps) {
-  const token = localStorage.getItem("token");
-  // const navigate = useNavigate();
-
-  // if (token) navigate("/");
-
   return (
     <main className="h-screen grid grid-cols-1 md:grid-cols-2 font-manrope">
       <img
@@ -62,10 +53,10 @@ function Auth({
         >
           <div className="flex flex-col gap-8">{children}</div>
           <div className="flex flex-col gap-2.5">
-            <Button type="primary" formSubmit={true}>
+            <Button btnType="primary" formSubmit="submit">
               {primaryButtonText}
             </Button>
-            <Button type="secondary" onClick={secondaryOnClick}>
+            <Button btnType="secondary" onClick={secondaryOnClick}>
               {secondaryButtonText}
             </Button>
           </div>

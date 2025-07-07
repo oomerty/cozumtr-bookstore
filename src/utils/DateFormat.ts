@@ -1,5 +1,5 @@
 interface dateFormatType {
-  date: object;
+  date: Date;
   type: "dd/mm/yyyy-hr/mn" | "dd/mm/yyyy";
 }
 

@@ -1,21 +1,15 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 interface AuthHookReturn {
-  login: (e: React.FormEvent<HTMLFormElement>, data: object) => Promise<void>;
-  register: (
-    e: React.FormEvent<HTMLFormElement>,
-    data: object
-  ) => Promise<void>;
+  login: (data: object) => Promise<void>;
+  register: (data: object) => Promise<void>;
   logout: () => void;
   token: string;
 }
 
 export function useAuth(): AuthHookReturn {
   const [authToken, setAuthToken] = useState("");
-
-  const navigate = useNavigate();
 
   const authenticate = async ({ token }: { token: string }) => {
     setAuthToken(token);
@@ -41,8 +35,8 @@ export function useAuth(): AuthHookReturn {
       authenticate({
         token: responseData.token,
       });
-    } catch (err: any) {
-      throw new Error(err?.response?.data?.message || "An error occurred");
+    } catch {
+      throw new Error("An error occurred");
     }
   };
 

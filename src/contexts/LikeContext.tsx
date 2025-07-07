@@ -1,8 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from "react";
 
+import type ProductType from "../types/ProductType";
+
 interface LikeContextType {
-  likeProduct: (product: object) => void;
+  likeProduct: (product: ProductType) => void;
   getLikedProducts: () => Array<object | null>;
   isLoading: boolean;
   error: string;
@@ -15,22 +17,18 @@ interface LikeContextProviderProps {
 const LikeContext = createContext<LikeContextType | undefined>(undefined);
 
 function LikeProvider({ children }: LikeContextProviderProps) {
-  const [likedProducts, setLikedProducts] = useState<object[]>([]);
+  const [likedProducts, setLikedProducts] = useState<ProductType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
-  function likeProduct(product: object) {
+  function likeProduct(product: ProductType) {
     try {
       setIsLoading(true);
 
       const alreadyLiked = likedProducts.find((el) => product.id === el.id);
 
       if (alreadyLiked) {
-        setLikedProducts((arr) =>
-          arr.filter((val) => {
-            val.id !== product.id;
-          })
-        );
+        setLikedProducts((arr) => arr.filter((val) => val.id !== product.id));
         return;
       }
 
