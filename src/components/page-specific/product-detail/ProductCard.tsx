@@ -15,23 +15,20 @@ interface ProductCardProps {
 }
 
 interface ProductCoverResponse {
-  url: string;
+  action_product_image: {
+    url: string;
+  };
 }
 
-const productCoverFetcher = (
+const productCoverFetcher = async (
   url: string,
   payload?: string
-): Promise<ProductCoverResponse> =>
-  axios({
-    method: "POST",
-    url,
-    data: {
-      fileName: payload,
-    },
-    headers: {
-      "Content-Type": "application/json",
-    },
+): Promise<ProductCoverResponse> => {
+  const response = await axios.post<ProductCoverResponse>(url, {
+    fileName: payload,
   });
+  return response.data;
+};
 
 const ProductCard = memo(function ProductCard({
   product,
@@ -41,7 +38,10 @@ const ProductCard = memo(function ProductCard({
 }: ProductCardProps) {
   const { data, isLoading } = useSWR<ProductCoverResponse>(
     [`${import.meta.env.VITE_API_BASE_URL}/cover_image`, product.cover],
-    ([url, fileName]) => productCoverFetcher(url, fileName)
+    (args) => {
+      const [url, fileName] = args as [string, string];
+      return productCoverFetcher(url, fileName);
+    }
   );
 
   return (
@@ -55,7 +55,7 @@ const ProductCard = memo(function ProductCard({
         } ${className && className}`}
       >
         <img
-          src={data?.data.action_product_image.url}
+          src={data?.action_product_image.url}
           alt={`Book cover for ${product.author}'s ${product.name}`}
           className={`rounded shadow-[0px_4px_8px_0px_rgba(98,81,221,0.20)] aspect-2/3 w-1/3 ${
             type === "lg" && "w-full"

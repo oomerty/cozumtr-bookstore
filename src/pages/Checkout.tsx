@@ -2,7 +2,7 @@ import { useEffect, useId, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { useCart } from "../contexts/CartContext";
-import type ProductType from "../../../types/ProductType";
+import type ProductType from "../types/ProductType";
 
 import Button from "../components/general/Button";
 import Spinner from "../components/general/Spinner";
@@ -12,7 +12,9 @@ import Message from "../components/general/Message";
 
 function Checkout() {
   const { getProductsOnCart, isLoading, error } = useCart();
-  const [productsOnCart, setProductsOnCart] = useState([]);
+  const [productsOnCart, setProductsOnCart] = useState<
+    Array<ProductType | null>
+  >([]);
   const navigation = useNavigate();
 
   const [searchParams] = useSearchParams();
@@ -22,7 +24,8 @@ function Checkout() {
   const purchaseId = useId();
 
   useEffect(() => {
-    const fetchedProductsOnCart = getProductsOnCart();
+    const fetchedProductsOnCart: Array<ProductType | null> =
+      getProductsOnCart();
 
     if (fetchedProductsOnCart.length === 0) {
       navigation("/cart");
@@ -126,14 +129,16 @@ function Checkout() {
       <span className="flex flex-col gap-2">
         <h2 className="font-semibold uppercase text-slate-900">Items</h2>
         <section className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
-          {productsOnCart.map((product: ProductType) => (
-            <ProductCard
-              type="sm"
-              categoryId={undefined}
-              product={product}
-              key={product.id}
-            />
-          ))}
+          {productsOnCart
+            .filter((product): product is ProductType => product !== null)
+            .map((product: ProductType) => (
+              <ProductCard
+                type="sm"
+                categoryId={undefined}
+                product={product}
+                key={product.id}
+              />
+            ))}
         </section>
       </span>
     </>

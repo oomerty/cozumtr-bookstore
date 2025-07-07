@@ -68,11 +68,9 @@ function Signup() {
         placeholder="john@mail.com"
         register={register("email", {
           required: "E-mail is required",
-          validate: (value) => {
-            if (!value.includes("@")) {
-              return "E-mail must include @";
-            }
-            return true;
+          pattern: {
+            value: /^\S+@\S+$/i,
+            message: "Invalid email format",
           },
         })}
       />

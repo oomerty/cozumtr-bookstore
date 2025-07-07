@@ -5,7 +5,7 @@ import type ProductType from "../types/ProductType";
 
 interface LikeContextType {
   likeProduct: (product: ProductType) => void;
-  getLikedProducts: () => Array<object | null>;
+  getLikedProducts: () => Array<ProductType | null>;
   isLoading: boolean;
   error: string;
 }

@@ -54,12 +54,12 @@ function HomeBanner() {
         </div>
       ))}
       <div className="flex flex-row gap-3 self-center items-center">
-        {slides.map((slide, index) => (
+        {slides.map((_, index) => (
           <span
             onClick={() => {
               if (index !== currentSlide) handleSlideSwitch(index);
             }}
-            className={` rounded-full transition duration-300 hover:ring-1 ${
+            className={`rounded-full transition duration-300 hover:ring-1 ${
               index === currentSlide
                 ? "size-3 bg-orange-500 hover:ring-orange-500"
                 : "size-2.5 bg-slate-900/60 hover:ring-slate-900/60"

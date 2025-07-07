@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useCart } from "../contexts/CartContext";
-import type ProductType from "../../../types/ProductType";
+import type ProductType from "../types/ProductType";
 
 import Button from "../components/general/Button";
 import Spinner from "../components/general/Spinner";
@@ -12,16 +12,19 @@ import ProductCard from "../components/page-specific/product-detail/ProductCard"
 
 function Cart() {
   const { getProductsOnCart, clearCart, isLoading } = useCart();
-  const [productsOnCart, setProductsOnCart] = useState([]);
+  const [productsOnCart, setProductsOnCart] = useState<
+    Array<ProductType | null>
+  >([]);
   const navigation = useNavigate();
 
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-    const fetchedProductsOnCart = getProductsOnCart();
-    if (fetchedProductsOnCart.length !== 0) {
+    const fetchedProductsOnCart: Array<ProductType | null> =
+      getProductsOnCart();
+    if (fetchedProductsOnCart.length !== 0 && fetchedProductsOnCart !== null) {
       const newTotalPrice = fetchedProductsOnCart.reduce(
-        (sum, item) => sum + item?.price,
+        (sum, item) => sum + (item?.price ?? 0),
         0
       );
       setTotalPrice(newTotalPrice);
@@ -64,14 +67,16 @@ function Cart() {
           />
         )}
         <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-          {productsOnCart.map((product: ProductType) => (
-            <ProductCard
-              type="sm"
-              categoryId={undefined}
-              product={product}
-              key={product.id}
-            />
-          ))}
+          {productsOnCart
+            .filter((product): product is ProductType => product !== null)
+            .map((product) => (
+              <ProductCard
+                type="sm"
+                categoryId={undefined}
+                product={product}
+                key={product.id}
+              />
+            ))}
         </section>
       </div>
 

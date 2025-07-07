@@ -11,11 +11,13 @@ import Message from "../components/general/Message";
 
 function Liked() {
   const { getLikedProducts, isLoading, error } = useLike();
-  const [likedProducts, setLikedProducts] = useState([]);
+  const [likedProducts, setLikedProducts] = useState<Array<ProductType | null>>(
+    []
+  );
   const navigation = useNavigate();
 
   useEffect(() => {
-    const fetchedLikedProducts: Array<object | null> = getLikedProducts();
+    const fetchedLikedProducts: Array<ProductType | null> = getLikedProducts();
     setLikedProducts(fetchedLikedProducts);
   }, [getLikedProducts]);
 
@@ -49,14 +51,16 @@ function Liked() {
         />
       )}
       <section className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
-        {likedProducts.map((product: ProductType) => (
-          <ProductCard
-            type="lg"
-            categoryId={undefined}
-            product={product}
-            key={product.id}
-          />
-        ))}
+        {likedProducts
+          .filter((product): product is ProductType => product !== null)
+          .map((product: ProductType) => (
+            <ProductCard
+              type="lg"
+              categoryId={undefined}
+              product={product}
+              key={product.id}
+            />
+          ))}
       </section>
     </>
   );

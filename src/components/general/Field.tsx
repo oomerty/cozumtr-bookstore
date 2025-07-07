@@ -1,4 +1,4 @@
-import type { UseFormRegister, FieldValues } from "react-hook-form";
+import type { UseFormRegisterReturn } from "react-hook-form";
 
 interface FieldProps {
   label?: string;
@@ -6,9 +6,9 @@ interface FieldProps {
   type?: "text" | "email" | "password";
   onClick?: () => void;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  register?: UseFormRegister<FieldValues>;
   disabled?: boolean;
   value?: string | number | readonly string[];
+  register?: UseFormRegisterReturn;
 }
 
 function Field({
@@ -17,9 +17,10 @@ function Field({
   type,
   onClick,
   onChange,
-  register,
   disabled,
   value,
+  register,
+  ...rest
 }: FieldProps) {
   return (
     <div className="flex flex-col gap-2.5">
@@ -40,6 +41,7 @@ function Field({
         value={value}
         onChange={onChange}
         {...register}
+        {...rest}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { useLike } from "../contexts/LikeContext";
+import type ProductType from "../types/ProductType";
 
 import Button from "../components/general/Button";
 import Card from "../components/general/Card";
@@ -21,11 +22,11 @@ function Product() {
 
   const product = location.state?.product;
 
-  function handleLikeProduct(product: object) {
+  function handleLikeProduct(product: ProductType) {
     likeProduct(product);
   }
 
-  function handleAddToCart(product: object) {
+  function handleAddToCart(product: ProductType) {
     addProductToCart(product);
   }
 

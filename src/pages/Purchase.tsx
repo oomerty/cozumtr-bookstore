@@ -25,6 +25,7 @@ function Purchase() {
   useEffect(() => {
     if (location.state?.productsOnCart === undefined) {
       navigation("/cart");
+      return;
     }
 
     clearCart();

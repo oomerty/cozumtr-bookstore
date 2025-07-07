@@ -5,7 +5,7 @@ import type ProductType from "../types/ProductType";
 
 interface CartContextType {
   addProductToCart: (product: ProductType) => void;
-  getProductsOnCart: () => Array<object | null>;
+  getProductsOnCart: () => Array<ProductType | null>;
   clearCart: () => void;
   isLoading: boolean;
   error: string;
