@@ -6,7 +6,7 @@ import type ProductType from "../types/ProductType";
 
 import Button from "../components/general/Button";
 import ProductCard from "../components/page-specific/product-detail/ProductCard";
-import { useEffect } from "react";
+import { memo, useEffect } from "react";
 
 function Purchase() {
   const { clearCart } = useCart();
@@ -110,4 +110,4 @@ function Purchase() {
   );
 }
 
-export default Purchase;
+export default memo(Purchase);

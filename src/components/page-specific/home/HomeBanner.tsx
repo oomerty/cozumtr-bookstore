@@ -45,7 +45,7 @@ function HomeBanner() {
           key={index}
         >
           <img src={slide.imgSrc} alt="" />
-          <p className="absolute left-4 md:left-8 top-1/4 w-full md:w-1/3 text-white text-lg md:text-5xl font-semibold leading-16">
+          <p className="absolute left-4 md:left-8 top-1/4 w-full md:w-1/2 text-white text-lg md:text-5xl font-semibold leading-16">
             <span className="text-orange-300 font-extrabold">
               {slide.captionHighlight && slide.captionHighlight}
             </span>
@@ -53,6 +53,7 @@ function HomeBanner() {
           </p>
         </div>
       ))}
+
       <div className="flex flex-row gap-3 self-center items-center">
         {slides.map((_, index) => (
           <span

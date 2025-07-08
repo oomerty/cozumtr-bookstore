@@ -2,6 +2,7 @@
 import { createContext, useContext, useState } from "react";
 
 import type ProductType from "../types/ProductType";
+import { useAuth } from "../hooks/useAuth";
 
 interface LikeContextType {
   likeProduct: (product: ProductType) => void;
@@ -21,14 +22,23 @@ function LikeProvider({ children }: LikeContextProviderProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const { isAuthenticated } = useAuth();
+
   function likeProduct(product: ProductType) {
+    if (!isAuthenticated) {
+      setError("You cannot like products without an account");
+      return;
+    }
+
     try {
       setIsLoading(true);
 
       const alreadyLiked = likedProducts.find((el) => product.id === el.id);
 
       if (alreadyLiked) {
+        console.log(likedProducts);
         setLikedProducts((arr) => arr.filter((val) => val.id !== product.id));
+        console.log(likedProducts);
         return;
       }
 

@@ -27,10 +27,11 @@ function Login() {
   const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
     try {
       await login(data);
-      throw new Error();
-    } catch {
+    } catch (err) {
       setError("root", {
-        message: "Cannot find user with this e-mail or password",
+        message: `${
+          err ? err : "Cannot log you in right now - please try again later"
+        }`,
       });
     } finally {
       if (!errors) {
@@ -67,6 +68,11 @@ function Login() {
           },
         })}
       />
+      {errors.email && (
+        <p className="text-base text-red-600 font-semibold">
+          {errors.email.message}
+        </p>
+      )}
       <Field
         type="password"
         label="Password"
@@ -79,14 +85,15 @@ function Login() {
           },
         })}
       />
+      {errors.password && (
+        <p className="text-base text-red-600 font-semibold">
+          {errors.password.message}
+        </p>
+      )}
 
       <Checkbox id="loginRememberMe" label="Remember Me" />
 
       {errors.root && <Alert title="Error" text={errors.root.message} />}
-      {errors.email && <Alert title="Error" text={errors.email.message} />}
-      {errors.password && (
-        <Alert title="Error" text={errors.password.message} />
-      )}
 
       {isSubmitSuccessful && <Alert title="Success" text="Login successful" />}
     </Auth>

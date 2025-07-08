@@ -1,21 +1,42 @@
-import { useState } from "react";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
 
 interface AuthHookReturn {
   login: (data: object) => Promise<void>;
   register: (data: object) => Promise<void>;
   logout: () => void;
+  isAuthenticated: boolean;
   token: string;
+}
+
+interface AuthErrorResponse {
+  internal?: {
+    response?: {
+      body?: {
+        message?: string;
+      };
+    };
+  };
 }
 
 export function useAuth(): AuthHookReturn {
   const [authToken, setAuthToken] = useState("");
+  const [authStatus, setAuthStatus] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      setAuthStatus(true);
+    }
+  }, []);
 
   const authenticate = async ({ token }: { token: string }) => {
     setAuthToken(token);
 
     try {
       localStorage.setItem("token", token);
+      setAuthStatus(true);
     } catch (error) {
       console.error("Failed to store auth data:", error);
     }
@@ -35,8 +56,13 @@ export function useAuth(): AuthHookReturn {
       authenticate({
         token: responseData.token,
       });
-    } catch {
-      throw new Error("An error occurred");
+    } catch (err: unknown) {
+      const axiosError = err as AxiosError<AuthErrorResponse>;
+
+      throw new Error(
+        axiosError.response?.data?.internal?.response?.body?.message ??
+          "An error occurred with authentication - please try again later"
+      );
     }
   };
 
@@ -45,6 +71,7 @@ export function useAuth(): AuthHookReturn {
 
     try {
       localStorage.removeItem("token");
+      setAuthStatus(false);
     } catch (error) {
       console.error("Failed to remove auth data:", error);
     }
@@ -54,6 +81,7 @@ export function useAuth(): AuthHookReturn {
     login: (data) => handleAuth("login", data),
     register: (data) => handleAuth("register", data),
     logout: () => handleLogout(),
+    isAuthenticated: authStatus,
     token: authToken,
   };
 }

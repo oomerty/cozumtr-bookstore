@@ -45,19 +45,6 @@ function Category() {
     categoryFetcher
   );
 
-  if (isLoading) {
-    return <Spinner />;
-  }
-
-  if (data?.data.product?.length === 0 || error) {
-    return (
-      <Message
-        title="Nothing..."
-        message="We can't deliver your favorite categories right now - try again later"
-      />
-    );
-  }
-
   const products = data?.data.product || [];
   const currCategory = categories.filter((el) => el.id === Number(id));
   const currCategoryTitle = currCategory.at(0)?.name;
@@ -70,9 +57,17 @@ function Category() {
         onClick={() => navigation("/")}
       >
         <span className="material-symbols-outlined">chevron_left</span>
-        {currCategoryTitle}
+        {currCategoryTitle || "Go Back"}
       </Button>
       <section className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-8">
+        {isLoading && <Spinner className="col-start-1 -col-end-1" />}
+        {(data?.data.product?.length === 0 || error) && (
+          <Message
+            title="Nothing..."
+            message="We can't deliver your favorite categories right now - try again later"
+            className="col-start-1 -col-end-1"
+          />
+        )}
         {products.map((product: Product) => (
           <ProductCard
             type="lg"

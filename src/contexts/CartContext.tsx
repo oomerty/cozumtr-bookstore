@@ -1,7 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 
 import type ProductType from "../types/ProductType";
+import { useAuth } from "../hooks/useAuth";
 
 interface CartContextType {
   addProductToCart: (product: ProductType) => void;
@@ -22,7 +23,14 @@ function CartProvider({ children }: CartContextProviderProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const { isAuthenticated } = useAuth();
+
   function addProductToCart(product: ProductType) {
+    if (!isAuthenticated) {
+      setError("You cannot add products to cart without an account");
+      return;
+    }
+
     try {
       setIsLoading(true);
 
@@ -49,9 +57,10 @@ function CartProvider({ children }: CartContextProviderProps) {
     return productsOnCart;
   }
 
-  function clearCart() {
+  const clearCart = useCallback(function clearCart() {
+    console.log("clearCart");
     setProductsOnCart([]);
-  }
+  }, []);
 
   const value: CartContextType = {
     addProductToCart,

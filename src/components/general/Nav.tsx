@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Field from "./Field";
 import Button from "./Button";
 import Card from "./Card";
-import { useRef, useState } from "react";
+import { memo, useRef, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 function Nav() {
@@ -102,4 +102,4 @@ function NavUserMenu({ className }: { className?: string }) {
   );
 }
 
-export default Nav;
+export default memo(Nav);

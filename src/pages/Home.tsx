@@ -12,18 +12,15 @@ function Home() {
     return <Spinner />;
   }
 
-  if (error) {
-    return (
-      <Message
-        title="404"
-        message="We cannot create your bookstore experience right now - please reload the page or try again later"
-      />
-    );
-  }
-
   return (
     <>
       <HomeBanner />
+      {error && (
+        <Message
+          title="404"
+          message="We cannot create your bookstore experience right now - please reload the page or try again later"
+        />
+      )}
       {categories.map((category) => (
         <Section category={category} key={category.id} />
       ))}

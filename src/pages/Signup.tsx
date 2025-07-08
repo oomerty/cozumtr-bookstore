@@ -27,10 +27,12 @@ function Signup() {
   const onSubmit: SubmitHandler<SignupFormInput> = async (data) => {
     try {
       await signup(data);
-    } catch {
+    } catch (err) {
+      console.log(errors);
       setError("root", {
-        message:
-          "There might already be an account with this email - please try to login first or try again later",
+        message: `${
+          err ? err : "Cannot register you right now - please try again later"
+        }`,
       });
       return;
     } finally {
@@ -62,6 +64,11 @@ function Signup() {
           required: "Name is required",
         })}
       />
+      {errors.name && (
+        <p className="text-base text-red-600 font-semibold">
+          {errors.name.message}
+        </p>
+      )}
       <Field
         type="email"
         label="E-mail"
@@ -74,6 +81,11 @@ function Signup() {
           },
         })}
       />
+      {errors.email && (
+        <p className="text-base text-red-600 font-semibold">
+          {errors.email.message}
+        </p>
+      )}
       <Field
         type="password"
         label="Password"
@@ -86,12 +98,13 @@ function Signup() {
           },
         })}
       />
+      {errors.password && (
+        <p className="text-base text-red-600 font-semibold">
+          {errors.password.message}
+        </p>
+      )}
 
       {errors.root && <Alert title="Error" text={errors.root.message} />}
-      {errors.email && <Alert title="Error" text={errors.email.message} />}
-      {errors.password && (
-        <Alert title="Error" text={errors.password.message} />
-      )}
 
       {isSubmitSuccessful && (
         <Alert title="Success" text="Account successfully created" />
