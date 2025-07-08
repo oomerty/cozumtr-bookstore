@@ -7,7 +7,7 @@ import { memo, useRef, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 
 function Nav() {
-  const token = localStorage.getItem("token");
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -32,7 +32,7 @@ function Nav() {
         <Field placeholder="Search" type="text" value="" onChange={() => {}} />
       </div>
       <div className="flex flex-row gap-4">
-        {token ? (
+        {isAuthenticated ? (
           <>
             <Button btnType="field" className="!px-2.5 inline-block md:hidden">
               <span className="material-symbols-outlined">search</span>
