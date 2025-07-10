@@ -4,7 +4,7 @@ import type { SubmitHandler } from "react-hook-form";
 
 import { useAuth } from "../hooks/useAuth";
 
-import { Auth } from "./Auth";
+import { Auth } from "../components/page-specific/auth/Auth";
 import Field from "../components/general/Field";
 import Checkbox from "../components/general/Checkbox";
 import Alert from "../components/general/Alert";
@@ -27,18 +27,16 @@ function Login() {
   const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
     try {
       await login(data);
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
     } catch (err) {
       setError("root", {
         message: `${
           err ? err : "Cannot log you in right now - please try again later"
         }`,
       });
-    } finally {
-      if (!errors) {
-        setTimeout(() => {
-          navigate("/");
-        }, 1500);
-      }
     }
   };
 

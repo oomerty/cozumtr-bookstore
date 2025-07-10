@@ -14,8 +14,12 @@ function Message({ children, title, message, className }: MessageProps) {
     >
       {title && message && (
         <>
-          <h1 className="text-orange-600 text-2xl font-bold">{title}</h1>
-          <p className="text-slate-900/60 text-base font-normal">{message}</p>
+          <h1 className="text-orange-500 text-2xl font-bold text-center">
+            {title}
+          </h1>
+          <p className="text-slate-900/60 text-base font-normal text-center">
+            {message}
+          </p>
         </>
       )}
       {children && children}

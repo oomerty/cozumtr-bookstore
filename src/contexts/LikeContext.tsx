@@ -36,9 +36,8 @@ function LikeProvider({ children }: LikeContextProviderProps) {
       const alreadyLiked = likedProducts.find((el) => product.id === el.id);
 
       if (alreadyLiked) {
-        console.log(likedProducts);
         setLikedProducts((arr) => arr.filter((val) => val.id !== product.id));
-        console.log(likedProducts);
+
         return;
       }
 

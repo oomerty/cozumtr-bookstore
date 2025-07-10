@@ -58,7 +58,6 @@ function CartProvider({ children }: CartContextProviderProps) {
   }
 
   const clearCart = useCallback(function clearCart() {
-    console.log("clearCart");
     setProductsOnCart([]);
   }, []);
 

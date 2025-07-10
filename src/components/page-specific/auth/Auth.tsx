@@ -1,7 +1,7 @@
 import type React from "react";
 import { Link } from "react-router-dom";
 
-import Button from "../components/general/Button";
+import Button from "../../general/Button";
 
 interface AuthProps {
   children: React.ReactNode;

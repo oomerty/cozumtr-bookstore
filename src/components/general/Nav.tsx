@@ -80,6 +80,13 @@ function NavUserMenu({ className }: { className?: string }) {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
+  function handleLogout() {
+    logout();
+    setTimeout(() => {
+      navigate("/");
+    }, 1500);
+  }
+
   return (
     <Card
       className={`z-50 !p-0 !gap-0 !bg-gray-100 !hover:bg-gray-100 !outline-0 min-w-32 ${
@@ -87,15 +94,7 @@ function NavUserMenu({ className }: { className?: string }) {
       }`}
     >
       <Button btnType="field">Profile</Button>
-      <Button
-        btnType="field"
-        onClick={() => {
-          logout();
-          setTimeout(() => {
-            navigate("/");
-          }, 1500);
-        }}
-      >
+      <Button btnType="field" onClick={handleLogout}>
         Logout
       </Button>
     </Card>

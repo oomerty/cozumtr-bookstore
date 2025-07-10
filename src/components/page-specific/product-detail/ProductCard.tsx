@@ -62,7 +62,7 @@ const ProductCard = memo(function ProductCard({
           } ${isLoading && "animate-pulse"}`}
         />
         <div
-          className={`flex flex-col h-full justify-between p-4 w-full ${
+          className={`flex flex-col h-full justify-between p-4 w-full overflow-hidden ${
             type === "lg" &&
             "flex-col md:flex-row items-start md:items-end px-0 py-2 gap-4 md:gap-0 pb-0"
           }`}

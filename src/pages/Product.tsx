@@ -9,11 +9,16 @@ import Message from "../components/general/Message";
 import Spinner from "../components/general/Spinner";
 import Alert from "../components/general/Alert";
 import { useCart } from "../contexts/CartContext";
+import { useEffect, useState } from "react";
 
 function Product() {
-  const { likeProduct, isLoading, error } = useLike();
+  const [isLiked, setIsLiked] = useState(false);
+  const [onCart, setOnCart] = useState(false);
+
+  const { likeProduct, getLikedProducts, isLoading, error } = useLike();
   const {
     addProductToCart,
+    getProductsOnCart,
     isLoading: isLoadingCart,
     error: errorCart,
   } = useCart();
@@ -22,13 +27,21 @@ function Product() {
 
   const product = location.state?.product;
 
-  function handleLikeProduct(product: ProductType) {
-    likeProduct(product);
-  }
+  useEffect(() => {
+    const likedProduct = getLikedProducts().filter(
+      (el) => el?.id === product.id
+    );
 
-  function handleAddToCart(product: ProductType) {
-    addProductToCart(product);
-  }
+    if (likedProduct) setIsLiked(likedProduct?.at(0));
+  }, [product, getLikedProducts]);
+
+  useEffect(() => {
+    const productOnCart = getProductsOnCart().filter(
+      (el) => el?.id === product.id
+    );
+
+    if (productOnCart) setOnCart(productOnCart?.at(0));
+  }, [product, getProductsOnCart]);
 
   if (!product) {
     return (
@@ -37,6 +50,14 @@ function Product() {
         message="You have entered an incomplete or incorrect link - please try again later"
       />
     );
+  }
+
+  function handleLikeProduct(product: ProductType) {
+    likeProduct(product);
+  }
+
+  function handleAddToCart(product: ProductType) {
+    addProductToCart(product);
   }
 
   return (
@@ -57,31 +78,38 @@ function Product() {
             className="rounded shadow-[0px_4px_8px_0px_rgba(98,81,221,0.20)] aspect-2/3"
           />
         </Card>
+
         <div className="flex flex-col gap-8 col-span-1 md:col-span-2">
-          <span className="flex flex-col gap-1">
-            <h1 className="text-black text-3xl font-semibold">
-              {product.name}
-            </h1>
-            <h2 className="text-black/60 text-2xl font-semibold">
-              {product.author}
-            </h2>
+          <span className="flex flex-row justify-between gap-1">
+            <span className="flex flex-col gap-1">
+              <h1 className="text-black text-3xl font-semibold">
+                {product.name}
+              </h1>
+              <h2 className="text-black/60 text-2xl font-semibold">
+                {product.author}
+              </h2>
+            </span>
 
             <Button
               btnType="field"
-              className="absolute right-8 !p-3 bg-violet-50 rounded-full shadow-[0px_4px_8px_0px_rgba(98,81,221,0.20)]"
+              className="!p-3 h-fit bg-violet-50 rounded-full shadow-[0px_4px_8px_0px_rgba(98,81,221,0.20)]"
               onClick={() => handleLikeProduct({ ...product, categoryId: 1 })}
             >
               {isLoading || isLoadingCart ? (
                 <Spinner />
               ) : (
-                <span className="material-symbols-outlined text-indigo-600">
+                <span
+                  className={`material-symbols-outlined ${
+                    isLiked && "material-symbols-filled"
+                  } text-indigo-600`}
+                >
                   favorite
                 </span>
               )}
             </Button>
           </span>
 
-          <span className="flex flex-col gap-1 h-full">
+          <span className="flex flex-col gap-1 h-full ">
             <h4 className="text-slate-900 text-xl font-bold">Summary</h4>
             <p className="text-slate-900/60 text-base font-normal text-justify">
               {product.description}
@@ -90,17 +118,20 @@ function Product() {
 
           <Button
             btnType="primary"
-            className="w-full md:w-max self-end gap-40"
+            className="flex flex-row w-full md:w-max self-end !justify-between md:gap-40"
             onClick={() => handleAddToCart(product)}
+            disabled={onCart}
           >
             <span className="text-bold">{product.price} $</span>
-            <span>Buy Now</span>
+            <span>{!onCart ? "Buy Now" : "Already on cart"}</span>
           </Button>
         </div>
       </section>
 
       {error && <Alert title="Error" text={error} />}
       {errorCart && <Alert title="Error" text={errorCart} />}
+      {isLiked && <Alert title="Success" text="Item is liked" />}
+      {onCart && <Alert title="Success" text="Item added to cart" />}
     </div>
   );
 }

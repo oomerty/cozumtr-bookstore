@@ -72,13 +72,12 @@ function Section({ className, category }: SectionProps) {
           View All
         </Button>
       </div>
-      <section className="flex flex-col md:flex-row col-span-2 gap-6 md:gap-4 overflow-x-scroll overflow-y-hidden">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 flex-wrap md:flex-row col-span-2 gap-6 md:gap-4">
         {products.map((product: ProductType) => (
           <ProductCard
             type="sm"
             categoryId={category.id}
             product={product}
-            className="md:w-80"
             key={product.id}
           />
         ))}

@@ -4,7 +4,7 @@ import type { SubmitHandler } from "react-hook-form";
 
 import { useAuth } from "../hooks/useAuth";
 
-import { Auth } from "./Auth";
+import { Auth } from "../components/page-specific/auth/Auth";
 import Field from "../components/general/Field";
 import Alert from "../components/general/Alert";
 
@@ -27,20 +27,17 @@ function Signup() {
   const onSubmit: SubmitHandler<SignupFormInput> = async (data) => {
     try {
       await signup(data);
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1500);
     } catch (err) {
-      console.log(errors);
       setError("root", {
         message: `${
           err ? err : "Cannot register you right now - please try again later"
         }`,
       });
       return;
-    } finally {
-      if (!errors) {
-        setTimeout(() => {
-          navigate("/");
-        }, 1500);
-      }
     }
   };
 
