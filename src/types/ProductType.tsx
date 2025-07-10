@@ -1,10 +1,4 @@
-export interface Category {
-  id: number;
-  name: string;
-  created_at: string;
-}
-
-export interface Product {
+export default interface ProductType {
   id: number;
   slug: string;
   name: string;
@@ -13,9 +7,4 @@ export interface Product {
   cover: string;
   price: number;
   created_at: string;
-  category_id?: number;
 }
-
-// Legacy default export for backward compatibility
-const ProductType = {} as Product;
-export default ProductType;

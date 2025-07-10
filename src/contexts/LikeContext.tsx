@@ -1,12 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from "react";
 
-import type { Product } from "../types/ProductType";
+import type ProductType from "../types/ProductType";
 import { useAuth } from "../hooks/useAuth";
 
 interface LikeContextType {
-  likeProduct: (product: Product) => void;
-  getLikedProducts: () => Array<Product | null>;
+  likeProduct: (product: ProductType) => void;
+  getLikedProducts: () => Array<ProductType | null>;
   isLoading: boolean;
   error: string;
 }
@@ -18,13 +18,13 @@ interface LikeContextProviderProps {
 const LikeContext = createContext<LikeContextType | undefined>(undefined);
 
 function LikeProvider({ children }: LikeContextProviderProps) {
-  const [likedProducts, setLikedProducts] = useState<Product[]>([]);
+  const [likedProducts, setLikedProducts] = useState<ProductType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const { isAuthenticated } = useAuth();
 
-  function likeProduct(product: Product) {
+  function likeProduct(product: ProductType) {
     if (!isAuthenticated) {
       setError("You cannot like products without an account");
       return;

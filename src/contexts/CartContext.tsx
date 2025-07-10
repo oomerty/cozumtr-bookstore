@@ -1,12 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useCallback, useContext, useState } from "react";
 
-import type { Product } from "../types/ProductType";
+import type ProductType from "../types/ProductType";
 import { useAuth } from "../hooks/useAuth";
 
 interface CartContextType {
-  addProductToCart: (product: Product) => void;
-  getProductsOnCart: () => Array<Product | null>;
+  addProductToCart: (product: ProductType) => void;
+  getProductsOnCart: () => Array<ProductType | null>;
   clearCart: () => void;
   isLoading: boolean;
   error: string;
@@ -19,13 +19,13 @@ interface CartContextProviderProps {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 function CartProvider({ children }: CartContextProviderProps) {
-  const [productsOnCart, setProductsOnCart] = useState<Product[]>([]);
+  const [productsOnCart, setProductsOnCart] = useState<ProductType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
   const { isAuthenticated } = useAuth();
 
-  function addProductToCart(product: Product) {
+  function addProductToCart(product: ProductType) {
     if (!isAuthenticated) {
       setError("You cannot add products to cart without an account");
       return;
@@ -75,7 +75,7 @@ function CartProvider({ children }: CartContextProviderProps) {
 function useCart(): CartContextType {
   const context = useContext(CartContext);
   if (context === undefined) {
-    throw new Error("useCart must be used within a CartProvider");
+    throw new Error("useLike must be used within a LikeProvider");
   }
   return context;
 }

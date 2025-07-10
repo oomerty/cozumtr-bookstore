@@ -6,7 +6,6 @@ import useSWR from "swr";
 import type ProductType from "../../../types/ProductType";
 
 import Card from "../../general/Card";
-import { useProductCover } from "../../../services/product-service";
 
 interface ProductCardProps {
   type: "sm" | "lg";
