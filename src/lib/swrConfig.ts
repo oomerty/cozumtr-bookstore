@@ -1,5 +1,11 @@
+import apiClient from "../services/api-client";
+
 export const swrGlobalConfig = {
   refreshInterval: 3000,
-  fetcher: (resource: RequestInfo, init?: RequestInit) =>
-    fetch(resource, init).then((res) => res.json()),
+  fetcher: async (url: string) => {
+    const response = await apiClient.get(url);
+    return response;
+  },
+  shouldRetryOnError: false,
+  errorRetryCount: 3,
 };

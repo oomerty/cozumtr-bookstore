@@ -1,5 +1,11 @@
-import { lazy, Suspense, useSyncExternalStore } from "react";
-import { BrowserRouter, Outlet, Route, Routes } from "react-router-dom";
+import { lazy, Suspense, useEffect, useSyncExternalStore } from "react";
+import {
+  BrowserRouter,
+  Outlet,
+  Route,
+  Routes,
+  useNavigate,
+} from "react-router-dom";
 import { SWRConfig } from "swr";
 import { swrGlobalConfig } from "./lib/swrConfig";
 
@@ -11,6 +17,7 @@ import Nav from "./components/general/Nav";
 import Message from "./components/general/Message";
 import { CartProvider } from "./contexts/CartContext";
 import Spinner from "./components/general/Spinner";
+import { useAuth } from "./hooks/useAuth";
 import ProtectedRoute from "./components/general/ProtectedRoute";
 
 const Home = lazy(() => import("./pages/Home"));

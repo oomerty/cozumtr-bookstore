@@ -1,26 +1,12 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useState } from "react";
-
-import useSWR from "swr";
-import axios from "axios";
-
-interface Category {
-  id: number;
-  name: string;
-  created_at: string;
-}
-
-interface CategoriesResponse {
-  category: Category[];
-}
-
-const categoriesFetcher = (url: string): Promise<CategoriesResponse> =>
-  axios.get(url).then((res) => res.data);
+import { createContext, useContext } from "react";
+import { useCategories as useCategoriesService } from "../services/category-service";
+import type { Category } from "../types/ProductType";
 
 interface CategoryContextType {
   categories: Category[];
   isLoading: boolean;
-  error: string;
+  error: unknown;
 }
 
 interface CategoryContextProviderProps {
@@ -32,21 +18,11 @@ const CategoryContext = createContext<CategoryContextType | undefined>(
 );
 
 function CategoryProvider({ children }: CategoryContextProviderProps) {
-  const [categoryData, setCategoryData] = useState<Category[]>([]);
-
-  const { data, error, isLoading } = useSWR<CategoriesResponse>(
-    `${import.meta.env.VITE_API_BASE_URL}/categories`,
-    categoriesFetcher
-  );
-
-  useEffect(() => {
-    if (data?.category) {
-      setCategoryData(data.category);
-    }
-  }, [data]);
+  // Using our service hook instead of direct API calls
+  const { categories, isLoading, error } = useCategoriesService();
 
   const value: CategoryContextType = {
-    categories: categoryData,
+    categories,
     isLoading,
     error,
   };

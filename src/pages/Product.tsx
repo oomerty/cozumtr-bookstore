@@ -32,7 +32,7 @@ function Product() {
       (el) => el?.id === product.id
     );
 
-    setIsLiked(likedProduct.length > 0);
+    if (likedProduct) setIsLiked(likedProduct?.at(0));
   }, [product, getLikedProducts]);
 
   useEffect(() => {
@@ -40,7 +40,7 @@ function Product() {
       (el) => el?.id === product.id
     );
 
-    setOnCart(productOnCart.length > 0);
+    if (productOnCart) setOnCart(productOnCart?.at(0));
   }, [product, getProductsOnCart]);
 
   if (!product) {
